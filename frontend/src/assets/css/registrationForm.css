@@ -1,0 +1,66 @@
+.reg-container-0 {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 5fr 2.6fr 5fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        ". chose-option ."
+        "btn-freelancer . btn-employer";
+    height: 80vh;
+    width: 50vw;
+    margin-top: 5vh;
+    text-align: center;
+}
+
+.btn-freelancer {
+    grid-area: btn-freelancer
+}
+
+.btn-employer {
+    grid-area: btn-employer
+}
+
+.chose-option {
+    grid-area: chose-option
+}
+
+.reg-container-1 {
+    display: grid;
+    grid-template-columns: 0.4fr 2.6fr 0.3fr;
+    grid-template-rows: 0.3fr 2.6fr 0.4fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+        ". progress-bar-container ."
+        ". Input ."
+        "btn-prev . btn-next";
+    height: 80vh;
+    width: 50vw;
+    margin-top: 5vh;
+}
+
+.progress-bar-container {
+    margin-top: 20px;
+    grid-area: progress-bar-container;
+}
+
+.btn-prev {
+    grid-area: btn-prev;
+}
+
+.btn-next {
+    grid-area: btn-next;
+}
+
+.Input {
+    grid-area: Input;
+}
+
+.experience-textarea,
+.biography-textarea {
+    min-height: 250px;
+    max-height: 250px;
+    height: 250px;
+    resize: none
+}

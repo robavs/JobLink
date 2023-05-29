@@ -1,0 +1,11 @@
+ceo kod morati da se uredi i strktuira da izgleda dobro
+
+STVARI KOJE NEDOSTAJU:
+
+1) urediti login page, urediti registraciju i home page i da postoji mogucnost vracanja
+na pocetnu stranicu
+
+2) ako user ne moze da se uloguje prikazi mu pooruku da je pogresio nesto
+
+3) u principu sad mi na refresh ne vraca custom gresku sto znaci da treba da se
+sacuva u local storage user, i da se brise kad se vrati na pocetnu

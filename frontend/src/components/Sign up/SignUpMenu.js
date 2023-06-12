@@ -5,63 +5,90 @@ import Login from './Login';
 import Registration from './Registration';
 import Error from './Error';
 import Home from './Home';
-import Dashboard from './UserInterface/Template/DashBoard';
+
 import { AuthProvider } from './context/AuthContext';
 import { METHODS } from './data/METHODS';
 import { RegistrationProvider } from './context/RegistrationContext';
+import Profile from './UserInterface/General/Profile';
+import UserAuthorization from './UserInterface/General/UserAuthorization'
+import Loading from '../Custom/Loading';
+import Jobs from './UserInterface/General/Jobs/ApplyForJob/Jobs';
+import Freelancers from './UserInterface/General/Freelancers/Freelancers';
+import ProfileViewMode from './UserInterface/ProfileTemplate/ProfileViewMode';
+import PostJob from './UserInterface/General/Jobs/PostingJob/PostJob';
+import { default as JobsAdmin } from './UserInterface/General/Jobs/AdminView/Jobs'
+import General from '../Web site/General';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpMenu() {
-    const [usersData, setUsersData] = useState([])
+    const [freelancers, setFreelancers] = useState([])
+    const [usersData, setUsersData] = useState([]) // svi podaci o korisnicima
+    const [usersUniqueData, setUsersUniqueData] = useState([]) // samo userName, email, idNumber i phoneNumber
     const [isLoading, setIsLoading] = useState(true)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const getUsers = async () => {
             try {
-                const freelancers = await (
+                const uniqueUsersValues = await (
+                    (await fetch(METHODS.User.GetUniqueProperties)).json()
+                )
+                setUsersUniqueData(uniqueUsersValues)
+                setIsLoading(false)
+
+                const allFreelancerData = await (
                     await fetch(METHODS.Freelancer.GetAll)
                 ).json()
 
-                const employers = await (
+                setFreelancers(allFreelancerData)
+
+                const allEmployersData = await (
                     await fetch(METHODS.Employer.GetAll)
                 ).json()
 
-                setUsersData([...freelancers, ...employers])
-                console.log([...freelancers, ...employers])
+                setUsersData([...allFreelancerData, ...allEmployersData])
             }
             catch (err) {
                 console.log("Doslo je do greske prilikom fecovanja podataka iz baze")
             }
         }
         getUsers()
-        setIsLoading(false)
     }, [])
 
-    // i ovde customizuj
     if (isLoading) {
-        return <h2>Loading...</h2>
+        return <Loading />
     }
 
     return (
-        <AuthProvider usersData={usersData}>
+        <AuthProvider props={{ freelancers, usersUniqueData, usersData }}>
             <Routes>
-                <Route path="/" element={<NavMenu />}>
+                <Route path="/" element={<General />} />
+
+                <Route path="/signup/*" element={<NavMenu />}>
                     <Route index element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/registration"
+                    <Route path="login" element={<Login />} />
+                    <Route path="registration"
                         element={
                             <RegistrationProvider>
                                 <Registration />
                             </RegistrationProvider>
                         } />
+                    <Route path="*" element={<Error redirect="/signup" />} />
                 </Route>
 
-                {/*Eventualno ce i ovde morati da se satvi custom 404 error */}
-                {/*Profilna ruta treba da bude privatna znaci ja kliknem na profil
-            ako nisam ulogvan vrati me na login stranicu
-            ako jesam ulogvan onda ces da mi prikazes moje informacije
-            */}
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/*" element={<Error />} />
+                {/*Ovo su zasticene rute */}
+                <Route path="/user/*" element={<UserAuthorization />}>
+                    <Route index element={<h2>Index ruta</h2>} />
+                    <Route path="profile" element={<Profile />} />
+                    <Route path="jobs" element={<Jobs />} />
+                    <Route path="freelancers" element={<Freelancers setFreelancers={setFreelancers} />} />
+                    <Route path="freelancers/:username" element={<ProfileViewMode />} />
+                    <Route path="postJob" element={<PostJob />} />
+                    <Route path="jobsAdmin" element={<JobsAdmin />} />
+                    <Route path="*" element={<Error redirect="/user" />} />
+                </Route>
+
+                <Route path="/*" element={<Error redirect="/signup" />} />
             </Routes>
         </AuthProvider>
     );

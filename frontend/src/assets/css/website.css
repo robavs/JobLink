@@ -1,15 +1,3 @@
-/**
-* Template Name: Impact
-* Updated: Mar 10 2023 with Bootstrap v5.2.3
-* Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
-/*--------------------------------------------------------------
-# Set main reusable colors and fonts using CSS variables
-# Learn more about CSS variables at https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties
---------------------------------------------------------------*/
 /* Fonts */
 
 .sticky {
@@ -19,8 +7,6 @@
   right: 0;
   z-index: 999;
 }
-
-
 
 /*----------------------------------------*/
 

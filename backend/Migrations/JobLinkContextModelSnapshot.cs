@@ -30,9 +30,6 @@ namespace backend.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("IdNumber")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Address")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
@@ -68,6 +65,9 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
+                    b.Property<string>("IdNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImgSrc")
                         .HasColumnType("nvarchar(max)");
 
@@ -85,12 +85,12 @@ namespace backend.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserName", "Email", "IdNumber");
+                    b.HasKey("UserName", "Email");
 
                     b.ToTable("Administrators");
                 });
 
-            modelBuilder.Entity("Advertisment", b =>
+            modelBuilder.Entity("Advertisement", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,61 +99,38 @@ namespace backend.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmployerEmail")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("EmployerIdNumber")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("EmployerUserName")
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Salary")
+                        .HasColumnType("int");
 
                     b.Property<string>("Skills")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployerUserName", "EmployerEmail", "EmployerIdNumber");
+                    b.HasIndex("EmployerUserName", "EmployerEmail");
 
-                    b.ToTable("Advertisments");
-                });
-
-            modelBuilder.Entity("AdvertismentFreelancer", b =>
-                {
-                    b.Property<int>("OglasiId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FreelancersUserName")
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("FreelancersEmail")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FreelancersIdNumber")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("OglasiId", "FreelancersUserName", "FreelancersEmail", "FreelancersIdNumber");
-
-                    b.HasIndex("FreelancersUserName", "FreelancersEmail", "FreelancersIdNumber");
-
-                    b.ToTable("AdvertismentFreelancer");
+                    b.ToTable("Advertisements");
                 });
 
             modelBuilder.Entity("Employer", b =>
@@ -165,9 +142,6 @@ namespace backend.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("IdNumber")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Address")
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
@@ -203,6 +177,9 @@ namespace backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(1)");
 
+                    b.Property<string>("IdNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImgSrc")
                         .HasColumnType("nvarchar(max)");
 
@@ -220,7 +197,7 @@ namespace backend.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserName", "Email", "IdNumber");
+                    b.HasKey("UserName", "Email");
 
                     b.ToTable("Employers");
                 });
@@ -232,9 +209,6 @@ namespace backend.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("IdNumber")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
@@ -275,6 +249,9 @@ namespace backend.Migrations
                     b.Property<int>("HourlyRate")
                         .HasColumnType("int");
 
+                    b.Property<string>("IdNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImgSrc")
                         .HasColumnType("nvarchar(max)");
 
@@ -295,38 +272,73 @@ namespace backend.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserName", "Email", "IdNumber");
+                    b.HasKey("UserName", "Email");
 
                     b.ToTable("Freelancers");
                 });
 
-            modelBuilder.Entity("Advertisment", b =>
+            modelBuilder.Entity("FreelancerAdvertisement", b =>
+                {
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AdvertisementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Application")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserName", "Email", "AdvertisementId");
+
+                    b.HasIndex("AdvertisementId");
+
+                    b.ToTable("FreelancerAdvertisements");
+                });
+
+            modelBuilder.Entity("Advertisement", b =>
                 {
                     b.HasOne("Employer", "Employer")
-                        .WithMany("Advertisments")
-                        .HasForeignKey("EmployerUserName", "EmployerEmail", "EmployerIdNumber");
+                        .WithMany("Advertisements")
+                        .HasForeignKey("EmployerUserName", "EmployerEmail");
 
                     b.Navigation("Employer");
                 });
 
-            modelBuilder.Entity("AdvertismentFreelancer", b =>
+            modelBuilder.Entity("FreelancerAdvertisement", b =>
                 {
-                    b.HasOne("Advertisment", null)
-                        .WithMany()
-                        .HasForeignKey("OglasiId")
+                    b.HasOne("Advertisement", "Advertisement")
+                        .WithMany("Freelancers")
+                        .HasForeignKey("AdvertisementId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Freelancer", null)
-                        .WithMany()
-                        .HasForeignKey("FreelancersUserName", "FreelancersEmail", "FreelancersIdNumber")
+                    b.HasOne("Freelancer", "Freelancer")
+                        .WithMany("Advertisements")
+                        .HasForeignKey("UserName", "Email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Advertisement");
+
+                    b.Navigation("Freelancer");
+                });
+
+            modelBuilder.Entity("Advertisement", b =>
+                {
+                    b.Navigation("Freelancers");
                 });
 
             modelBuilder.Entity("Employer", b =>
                 {
-                    b.Navigation("Advertisments");
+                    b.Navigation("Advertisements");
+                });
+
+            modelBuilder.Entity("Freelancer", b =>
+                {
+                    b.Navigation("Advertisements");
                 });
 #pragma warning restore 612, 618
         }

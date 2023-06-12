@@ -11,14 +11,14 @@ export default function NavMenu() {
                 <Box sx={{ flexGrow: 1 }}>
                     <AppBar position="static">
                         <Toolbar>
-                            <Link to="/">
-                                <Button color="inherit">Početna</Button>
+                            <Link to="/signup">
+                                <Button style={{ color: "white" }}>Početna</Button>
                             </Link>
-                            <Link to="/login">
-                                <Button color="inherit">Prijava</Button>
+                            <Link to="/signup/login">
+                                <Button style={{ color: "white" }}>Prijava</Button>
                             </Link>
-                            <Link to="/registration">
-                                <Button color="inherit">Registracija</Button>
+                            <Link to="/signup/registration">
+                                <Button style={{ color: "white" }}>Registracija</Button>
                             </Link>
                         </Toolbar>
                     </AppBar>

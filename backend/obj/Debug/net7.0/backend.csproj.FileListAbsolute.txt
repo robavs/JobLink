@@ -74,3 +74,7 @@ C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\obj\Debug\net7.0\refint\back
 C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\obj\Debug\net7.0\backend.pdb
 C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\obj\Debug\net7.0\backend.genruntimeconfig.cache
 C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\obj\Debug\net7.0\ref\backend.dll
+C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\bin\Debug\net7.0\sample data\employers.json
+C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\bin\Debug\net7.0\sample data\freelancers.json
+C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\ALEKSA\OneDrive\Desktop\Aplikacija\backend\bin\Debug\net7.0\sample data\administrator.json

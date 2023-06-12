@@ -16,6 +16,7 @@ import { useState, useEffect } from 'react'
 import { METHODS } from './data/METHODS';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import Loading from '../Custom/Loading';
 
 //ovaj template je preuzet sa https://mui.com/material-ui/getting-started/templates/sign-in/
 // generalno mi se ne svidja kako izgleda ovaj template ali cu da ga zamenim posle
@@ -35,7 +36,7 @@ export default function Login() {
 
     useEffect(() => {
         if (Object.keys(user).length !== 0) {
-            navigate("/dashboard")
+            navigate("/user")
             setIsLoginStarted(false)
         }
     }, [user])
@@ -46,21 +47,31 @@ export default function Login() {
             setInvalidCredentials(true)
             return
         }
+
+        setIsLoginStarted(true)
+
         try {
-            const result = await fetch(METHODS.UserLogin + `/${userNameOrEmail}/${password}`)
+            const result = await fetch(METHODS.User.UserLogin + `/${userNameOrEmail}/${password}`)
             const userData = await result.json()
+
+            // setujem ga na localstorage da mi se user ne bi gubio prilikom
+            // refresovanja (e sada ne znam da li sve one operacije updejtovanja
+            // treba da se rade lokalno i direktno da reaguju sa bazom), pa onda
+            // na neki logout da se tek tad updejtuje. 
+
+            localStorage.setItem("user", JSON.stringify(userData))
             setUser(userData)
-            setIsLoginStarted(true)
         }
         catch (err) {
             console.log(err)
             setInvalidCredentials(true)
+            setIsLoginStarted(false)
             setErrorMessage("Podaci za prijavu korisnika su pogrešni. Ako nemate nalog pređite na regisrtaciju!")
         }
     }
 
     if (isLoginStarted) {
-        return <h2>LOADING...</h2>
+        return <Loading />
     }
 
     return (
@@ -79,14 +90,18 @@ export default function Login() {
 
                     <Box component="form" noValidate sx={{ mt: 1 }}>
 
-                        <TextField error={invalidCredentials}
+                        <TextField
+                            value={userNameOrEmail}
+                            error={invalidCredentials}
                             onChange={e => {
                                 setUserNameOrEmail(e.target.value)
                                 setInvalidCredentials(false)
                             }}
                             margin="normal" required fullWidth id="emailOrUserName" label="Email ili Korisničko ime" name="email" autoComplete="off" autoFocus />
 
-                        <TextField error={invalidCredentials}
+                        <TextField
+                            value={password}
+                            error={invalidCredentials}
                             onChange={e => {
                                 setPassword(e.target.value)
                                 setInvalidCredentials(false)
@@ -103,18 +118,6 @@ export default function Login() {
                             Prijava
                         </Button>
 
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </Box>
                 </Box>
 
@@ -128,6 +131,6 @@ export default function Login() {
                 </Typography>
 
             </Container>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }

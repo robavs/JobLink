@@ -1,7 +1,7 @@
 export const REG_EXP = {
     firstName: /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
     lastName: /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u,
-    email: /^[a-zA-Z0-9]+$/,
+    email: /.+\@.+\..+/,
     userName: /^[a-zA-Z0-9]+$/,
     password: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
     confirmPassword: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
@@ -16,7 +16,7 @@ export const REG_EXP = {
 
 export const initialInputValues = {
     firstName: "", lastName: "", userName: "", email: "", password: "", confirmPassword: "", gender: "M",
-    birthDate: "", country: "AF", city: "", address: "", idNumber: "", phoneNumber: "", category: "Marketing", profileImage: "", imgSrc: "",
+    birthDate: "", country: "AF", city: "", address: "", idNumber: "", phoneNumber: "", category: "Marketing", profileImage: "", imgSrc: "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg",
     biography: "", skills: new Set(), experience: "", hourlyRate: ""
 }
 

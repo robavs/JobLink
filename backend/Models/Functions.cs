@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-
 public class Functions<T> : ControllerBase where T : User
 {
     public bool InvalidValue(string? str)
@@ -33,14 +32,19 @@ public class Functions<T> : ControllerBase where T : User
 
             if (InvalidValue(user.ImgSrc))
             {
-                string defaultImgPath = "C:/Users/ALEKSA/OneDrive/Desktop/Aplikacija/backend/data/Profile Picture.png";
-                if (System.IO.File.Exists(defaultImgPath))
-                {
-                    // mozda ce trebati neka ispravka da se napravi
-                    // jer mi se cini da kad posaljem sa frontenda dobijem i base64/img png dodatno
-                    byte[] imageArray = await System.IO.File.ReadAllBytesAsync(defaultImgPath);
-                    user.ImgSrc = "data:image/jpeg;base64," + Convert.ToBase64String(imageArray);
-                }
+                // spore su performanse kad se radi sa base64 formatom tako da ce da se cuva link
+                // a za one koje user updejtuje cuvace se u base64 formatu, mada vrv treba da se napravi
+                // da se i od njih uzima link
+
+                // string defaultImgPath = "C:/Users/ALEKSA/OneDrive/Desktop/Aplikacija/backend/data/Profile Picture.png";
+                // if (System.IO.File.Exists(defaultImgPath))
+                // {
+                //     // mozda ce trebati neka ispravka da se napravi
+                //     // jer mi se cini da kad posaljem sa frontenda dobijem i base64/img png dodatno
+                //     byte[] imageArray = await System.IO.File.ReadAllBytesAsync(defaultImgPath);
+                //     user.ImgSrc = "data:image/jpeg;base64," + Convert.ToBase64String(imageArray);
+                // }
+                user.ImgSrc = "https://i.pinimg.com/originals/f1/0f/f7/f10ff70a7155e5ab666bcdd1b45b726d.jpg";
             }
 
             DateTime CurrentDate = DateTime.Now;
@@ -59,14 +63,15 @@ public class Functions<T> : ControllerBase where T : User
             DbSet<T>? contextType = user is Freelancer ? Context.Freelancers as DbSet<T> : user is Employer ? Context.Employers as DbSet<T> :
             Context.Administrators as DbSet<T>;
 
-            if (contextType == null || Context.Freelancers == null || Context.Employers == null)
+            if (contextType == null || Context.Freelancers == null || Context.Employers == null || Context.Administrators == null)
             {
                 return BadRequest("Context is null!");
             }
 
             var freelancers = Context.Freelancers.Select(r => new { r.UserName, r.Email, r.IdNumber, r.PhoneNumber });
             var employers = Context.Employers.Select(p => new { p.UserName, p.Email, p.IdNumber, p.PhoneNumber });
-            var users = freelancers.Concat(employers);
+            var administrators = Context.Administrators.Select(a => new { a.UserName, a.Email, a.IdNumber, a.PhoneNumber });
+            var users = freelancers.Concat(employers).Concat(administrators);
 
             foreach (var u in users)
             {
@@ -122,6 +127,40 @@ public class Functions<T> : ControllerBase where T : User
         return null;
     }
 
+    public async Task<ActionResult> UpdatePassword(string userName, string oldPassword, string newPassword, DbSet<T> users, JobLinkContext context)
+    {
+        try
+        {
+            if (InvalidValue(userName) || InvalidValue(oldPassword) || InvalidValue(newPassword))
+                return BadRequest("Incorrect values provided!");
+
+            var user = await users.Where(u => u.UserName == userName).FirstOrDefaultAsync();
+
+            if (user == null) return BadRequest("User doesn't exist");
+
+            var verifyNewPassword = new PasswordHasher<T>().VerifyHashedPassword(user, user.Password!, newPassword);
+            var verifyOldPassword = new PasswordHasher<T>().VerifyHashedPassword(user, user.Password!, oldPassword);
+
+            // stara lozinka se poklapa
+            if (verifyOldPassword == PasswordVerificationResult.Success)
+            {
+                // sprecavamo da stara i nova lozinka budu iste
+                if (verifyNewPassword == PasswordVerificationResult.Success)
+                {
+                    return BadRequest("New password can't be same as previous password!");
+                }
+                user.Password = new PasswordHasher<T>().HashPassword(user, newPassword);
+                await context.SaveChangesAsync();
+                return Ok("Password succesfully changed!");
+            }
+            return BadRequest("You provided worng password");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     // genericka update metoda
     public async Task<ActionResult> UpdateProperty<TValue>(string userName, TValue newValue, string propertyName, DbSet<T> users, JobLinkContext context)
     {
@@ -139,23 +178,7 @@ public class Functions<T> : ControllerBase where T : User
                 return BadRequest("User with given name doesn't exist");
             }
 
-            //updejtovanje lozinke je spoecificno jer mora da se hesira, a i pre toga potvrdjujemo da nije ista kao prethodna
-            if (propertyName == "Password" && typeof(TValue) == typeof(string))
-            {
-                string? newPassword = newValue as string;
-                if (newPassword == null)
-                {
-                    return BadRequest("Invalid value type for property");
-                }
-                var passwordVerification = new PasswordHasher<T>().VerifyHashedPassword(user, user.Password!, newPassword);
-                if (passwordVerification == PasswordVerificationResult.Success)
-                {
-                    return BadRequest("New password can't be same as previous password!");
-                }
-                newValue = (TValue)(object)new PasswordHasher<T>().HashPassword(user, newPassword);
-            }
-
-            // GetProperty vraca propertyInfo objkeat i onda tom objektu mogu da setujem vrednost
+            // GetProperty vraca propertyInfo objekat i onda tom objektu mogu da setujem vrednost
             var PropertyName = typeof(T).GetProperty(propertyName);
 
             if (PropertyName == null)

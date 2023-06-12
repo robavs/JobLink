@@ -35,15 +35,10 @@ public class User
     [MaxLength(15)]
     public string? PhoneNumber { get; set; }
 
-    [Key]
     public string? IdNumber { get; set; }
 
     public string? Biography { get; set; }
-    // ovo se pamti kao string formata
-    // IT,Science,Electrical Engineering i tako
-    // jer se sve to preuzima sa klijentske
-    // strane pa posto je neprakticnije 
-    // da se sacuva lista ovo je dobar nacin
+    
     public string? Category { get; set; }
 
     public string? Type { get; protected set; }

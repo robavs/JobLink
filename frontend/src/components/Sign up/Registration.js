@@ -11,6 +11,7 @@ import { useAuth } from './context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import '../../assets/css/registrationForm.css'
+import Loading from '../Custom/Loading'
 
 const employerForm = [FirstPage, SecondPage, ThirdPage, FourthPage, FifthPage]
 const freelancerForm = [...employerForm, FreelancerExtraPage]
@@ -27,12 +28,9 @@ export default function Registration() {
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
-    // treba da dodam loading state dok se ne upise u bazu i postavi na profilnu stranicu,
-    // a isto to treba da uradim i kod login komponente
-
     useEffect(() => {
-        if (Object.keys(user).length != 0) {
-            navigate("/dashboard")
+        if (Object.keys(user).length !== 0) {
+            navigate("/user")
             setIsLoading(false)
         }
     }, [user])
@@ -48,7 +46,7 @@ export default function Registration() {
         else {
             setProgressBarPercentage(page / (isFreelancer ? 6 : 5) * 100)
         }
-        setIsLastPage(isFreelancer && page === 6 || isEmployer && page === 5)
+        setIsLastPage((isFreelancer && page === 6) || (isEmployer && page === 5))
     }, [page])
 
 
@@ -68,6 +66,7 @@ export default function Registration() {
                 delete user["experience"]
             }
             const addUserMethodURL = isFreelancer ? METHODS.Freelancer.Add : METHODS.Employer.Add
+            setIsLoading(true)
 
             await fetch(addUserMethodURL, {
                 method: "POST",
@@ -80,9 +79,8 @@ export default function Registration() {
             // moramo da i dodamo tip jer se on automatski postavlja u kontrolerima
             // jer prilikom registrovanja nece znati kog je tipa, jer koristimo taj objekat
             user["type"] = isFreelancer ? "Freelancer" : "Employer"
-
+            localStorage.setItem("user", JSON.stringify(user))
             setUser(user)
-            setIsLoading(true)
         }
         catch (err) {
             console.log(err)
@@ -90,16 +88,18 @@ export default function Registration() {
     }
 
     if (isLoading) {
-        return <h2>Loading...</h2>
+        return <Loading />
     }
 
     return (
         <>
-            <div className={`container border border-primary reg-container-${page == 0 ? "0" : "1"}`}>
-                {(page == 0) &&
+            <div className={`container reg-container-${page === 0 ? "0" : "1"}`}
+                style={{ boxShadow: "0px 8px 16px 0px rgba(0, 0, 0, 0.2)" }}
+            >
+                {(page === 0) &&
                     <>
                         <div className="chose-option">
-                            <h2>Prijavi se kao:</h2>
+                            <h2>Registruj se kao:</h2>
                         </div>
 
                         <div className="btn-freelancer">
@@ -124,7 +124,7 @@ export default function Registration() {
                         </div>
                     </>
                 }
-                {page != 0 &&
+                {page !== 0 &&
                     <>
                         <ProgressBar className="progress-bar-container" animated now={progressBarPercentage} />
 
@@ -151,6 +151,7 @@ export default function Registration() {
                         <div className="Input">
                             {form.map((Page, index) => {
                                 if (page === index + 1) return <Page key={index} />
+                                return null
                             })}
                         </div>
                     </>

@@ -10,7 +10,7 @@ export const RegistrationProvider = ({ children }) => {
     const [areInputsValid, setAreInputsValid] = useState(false)
     const [inputValues, setInputValues] = useState(initialInputValues)
     const [inputStatus, setInputStatus] = useState(initalInputStatus)
-    const { usersData } = useAuth()
+    const { usersUniqueData } = useAuth()
 
     const changeValueAndStatus = (e, uniqueCheck = false) => {
         let status = ""
@@ -25,7 +25,7 @@ export const RegistrationProvider = ({ children }) => {
 
         else if (REG_EXP[property].test(value)) {
             if (uniqueCheck) {
-                const isUnique = usersData.some(user => user[property] === value)
+                const isUnique = usersUniqueData.some(user => user[property] === value)
                 status = isUnique ? "exists" : "valid"
             }
             else status = "valid"
@@ -46,7 +46,20 @@ export const RegistrationProvider = ({ children }) => {
     }
 
     return (
-        <RegistrationContext.Provider value={{ initialInputValues, initalInputStatus, setInputValues, setInputStatus, areInputsValid, setAreInputsValid, changeValueAndStatus, inputValues, inputStatus, canGoToNextPage }}>
+        <RegistrationContext.Provider
+            value={{
+                initialInputValues,
+                initalInputStatus,
+                setInputValues,
+                setInputStatus,
+                areInputsValid,
+                setAreInputsValid,
+                changeValueAndStatus,
+                inputValues,
+                inputStatus,
+                canGoToNextPage
+            }}
+        >
             {children}
         </RegistrationContext.Provider>
     )

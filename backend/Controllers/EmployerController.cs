@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 [ApiController]
 [Route("[controller]")]
@@ -26,10 +27,10 @@ public class EmployerController : ControllerBase
         return await methods.UpdateProperty(userName, imgSrc, "ImgSrc", Context!.Employers!, Context);
     }
 
-    [HttpPut("UpdatePassword/{userNameOrEmail}/{newPassword}")]
-    public async Task<ActionResult> UpdatePassword(string userNameOrEmail, string newPassword)
+    [HttpPut("UpdatePassword/{userName}/{oldPassword}/{newPassword}")]
+    public async Task<ActionResult> UpdatePassword(string userName, string oldPassword, string newPassword)
     {
-        return await methods.UpdateProperty(userNameOrEmail, newPassword, "Password", Context!.Employers!, Context);
+        return await methods.UpdatePassword(userName, oldPassword, newPassword, Context!.Employers!, Context);
     }
 
     [HttpPut("UpdateBiography/{userName}")]
@@ -53,7 +54,7 @@ public class EmployerController : ControllerBase
     [HttpGet("GetAll")]
     public ActionResult GetEmployers()
     {
-        return Ok(Context?.Employers);
+        return Ok(Context?.Employers!);
     }
 
     [HttpDelete("DeleteAll")]
@@ -61,4 +62,71 @@ public class EmployerController : ControllerBase
     {
         return await methods.DeleteAll(Context!, 'E');
     }
+
+    // metoda vraca sve oglase employera, zajedno sa svima prijavama
+    // freelancera
+    [HttpGet("GetAdvertisements/{userName}")]
+    public async Task<ActionResult> GetAdvertisements(string userName)
+    {
+        try
+        {
+            var employer = await Context!.Employers!
+                            .Include(e => e.Advertisements!)
+                            .ThenInclude(a => a.Freelancers!)
+                            .ThenInclude(f => f.Freelancer)
+                            .FirstOrDefaultAsync(e => e.UserName == userName);
+
+            if (employer == null) return BadRequest("Employer with given userName doesn't exist");
+
+            var advertisementsWithFreelancers = employer.Advertisements!
+                .Select(a => new
+                {
+                    Advertisement = a,
+                    Freelancers = a.Freelancers!.Select(f => new
+                    {
+                        // trebace verovatno rejting da se pokupi al to posle kad se napravi recenzija
+                        FirstName = f.Freelancer!.FirstName,
+                        LastName = f.Freelancer!.LastName,
+                        UserName = f.Freelancer!.UserName,
+                        HourlyRate = f.Freelancer!.HourlyRate,
+                        Skills = f.Freelancer!.Skills,
+                        ImgSrc = f.Freelancer!.ImgSrc,
+                        Application = f.Application
+                    })
+                });
+
+            return Ok(advertisementsWithFreelancers);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+    // [HttpPost("UpisiEmployerse")]
+    // public async Task<ActionResult> AddFreelancers()
+    // {
+    //     try
+    //     {
+    //         // Učitajte JSON objekte iz fajla ili iz nekog drugog izvora
+    //         string json = System.IO.File.ReadAllText("./sample data/employers.json");
+    //         List<Employer> employers = JsonConvert.DeserializeObject<List<Employer>>(json)!;
+
+    //         if (Context == null || Context.Employers == null)
+    //         {
+    //             return StatusCode(500, "Context or Employers DbSet is null.");
+    //         }
+
+    //         foreach (var e in employers)
+    //         {
+    //             await AddEmployer(e);
+    //         }
+
+    //         await Context.SaveChangesAsync();
+    //         return Ok("Employers added successfully.");
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return StatusCode(500, $"An error occurred: {ex.Message}");
+    //     }
+    // }
 }

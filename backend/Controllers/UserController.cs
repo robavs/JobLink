@@ -31,7 +31,23 @@ public class UserController : ControllerBase
             return Ok(employer);
         }
 
+        var administrator = await new Functions<Administrator>().FindUser(userNameOrEmail, password, Context!.Administrators!);
+
+        if (administrator != null)
+        {
+            return Ok(administrator);
+        }
         // posle ce trebati i za admina da se doda ovaj metod
         return BadRequest("User with given credentials doens't exist");
+    }
+
+    [HttpGet("GetUniqueProperties")]
+    public async Task<ActionResult> GetUniqueProperties()
+    {
+        var users = await Context!.Administrators!.Select(a => new { a.UserName, a.Email, a.IdNumber, a.PhoneNumber })
+                    .Concat(Context!.Freelancers!.Select(f => new { f.UserName, f.Email, f.IdNumber, f.PhoneNumber }))
+                    .Concat(Context!.Employers!.Select(e => new { e.UserName, e.Email, e.IdNumber, e.PhoneNumber }))
+                    .ToListAsync();
+        return Ok(users);
     }
 }

@@ -1,0 +1,688 @@
+* {
+    box-sizing: border-box;
+}
+
+section {
+    padding: 20px;
+}
+
+.jobs h2 {
+    margin-top: 0;
+}
+
+.jobs li {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#primer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    font-size: 24px;
+    font-weight: bold;
+
+    margin-bottom: 29px;
+}
+
+#primer2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    font-size: 24px;
+    font-weight: bold;
+
+
+}
+
+.jobs li button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.jobs li button:hover {
+    background-color: #555;
+}
+
+.jobs li h3 {
+    margin-top: 0;
+}
+
+.jobs li p {
+    margin: 10px 0;
+}
+
+.jobs li span {
+    font-weight: bold;
+}
+
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    display: flex;
+    display: grid;
+    grid-row: auto;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    border-radius: 5px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 8px 0;
+    display: block;
+    transition: background-color 0.3s ease-out;
+}
+
+.dropdown-content a:hover {
+    background-color: #4caf50;
+
+}
+
+.search-jobs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+
+}
+
+#search-bar {
+    width: 300px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    font-size: 16px;
+}
+
+#search-button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#search-button:hover {
+    background-color: #3e8e41;
+}
+
+
+
+
+.job-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.job-item__title {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.job-item__description {
+    margin-bottom: 10px;
+}
+
+.job-item__company {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-style: italic;
+}
+
+.apply-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.apply-popup__title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.apply-popup__form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.apply-popup__form label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.apply-popup__form input,
+.apply-popup__form textarea {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.apply-popup__submit-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+
+.job-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.job-popup .content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    max-height: 80%;
+    overflow-y: auto;
+}
+
+.job-popup h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.job-popup p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.job-popup label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.job-popup input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.job-popup button {
+    /* background-color: #4CAF50; */
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 40px;
+    width: 90px
+}
+
+.job-popup button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+
+.job-item-hover {
+    /* styles for job item on hover */
+    background-color: #4caf50 !important;
+    cursor: pointer !important;
+    transition: background-color 0.4s ease-in-out;
+
+}
+
+
+/* Popup window */
+.job-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 600px;
+    max-width: 90%;
+    z-index: 999;
+    display: none;
+}
+
+.job-popup-active {
+    display: block;
+}
+
+.job-popup h3 {
+    margin-top: 0;
+}
+
+.job-popup p.company {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.job-popup form {
+    margin-top: 20px;
+}
+
+.job-popup label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.job-popup textarea {
+    display: block;
+    width: 100%;
+    height: 150px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.job-popup button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+/* CSS kod */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+/* .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+} */
+
+#delete-button {
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid red;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    text-align: center;
+    display: none;
+}
+
+.popup-content {
+    margin-bottom: 10px;
+}
+
+.confirm-button,
+.cancel-button {
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.window {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgb(0, 124, 247);
+    max-width: 600px;
+    /* Dodatna linija za ograničenje širine */
+    margin: 20px auto;
+    /* Dodatna linija za centriranje po horizontali */
+    transition: ease-out 0.25s;
+}
+
+.window:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.window p {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+} */
+
+
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    max-width: 90%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+#popup h2 {
+    margin-top: 0;
+}
+
+#popup form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#popup form input,
+#popup form textarea {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#popup form button {
+    margin-top: 10px;
+}
+
+#popup form button[type="submit"] {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#popup form button[type="button"] {
+    margin-left: 10px;
+}
+
+
+.active-jobs {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.active-jobs {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.active-jobs h2 {
+    margin-top: 0;
+}
+
+.job-card {
+    width: 700px;
+    margin: 0 auto;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    margin-top: 15px;
+    transition: ease-in-out 0.25s;
+    box-shadow: 0px 0px 10px rgb(0, 124, 247);
+    cursor: pointer;
+}
+
+.job-card:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.job-card h3 {
+    margin-top: 0;
+}
+
+.job-card p {
+    margin-bottom: 5px;
+}
+
+
+.active-jobs {
+    margin-top: 100px;
+}
+
+
+#popup2 {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 100%;
+    max-height: calc(100vh - 100px);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    overflow-y: scroll;
+}
+
+#popup2 h2 {
+    margin-top: 0;
+
+}
+
+#popup2 form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#popup2 form input,
+#popup2 form textarea {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#popup2 form button {
+    margin-top: 10px;
+}
+
+#popup2 form button[type="submit"] {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#popup2 form button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+#popup2 form button[type="button"] {
+    margin-left: 10px;
+}
+
+
+#overlay2 {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+
+/* Stilovi za pop-up prozor */
+#job-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.job-info {
+    background-color: #fff;
+    padding: 20px;
+    max-width: 500px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.job-title-popup {
+    font-size: 24px;
+    margin-top: 0;
+}
+
+.job-description-popup {
+    font-size: 16px;
+}
+
+.requirements-popup {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.hourly-rate-popup {
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+ul.freelancer-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.freelancer-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.freelancer-name {
+    font-weight: bold;
+    margin-left: 10px
+}
+
+.freelancer-details {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.send-message-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

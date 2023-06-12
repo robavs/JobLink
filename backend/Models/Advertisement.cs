@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-public class Advertisment
+public class Advertisement
 {
     [Key]
     public int Id { get; set; }
@@ -10,26 +11,33 @@ public class Advertisment
 
     public string? EmployerEmail { get; set; }
 
-    public string? EmployerIdNumber { get; set; }
-
-    // ovo je trenutno samo opciono razmislicu da li treba da se ubacuje uopste
-    // i koji je najbolji nacin da se ishendluje lista aktivnih i ovih drugih
     public string? Status { get; set; }
 
+    [Required]
     public string? Title { get; set; }
 
+    [Required]
     public string? Description { get; set; }
 
+    [Required]
     public string? Category { get; set; }
 
+    [Required]
     public string? Skills { get; set; }
 
-    public DateTime StartDate { get; set; }
+    [Required]
+    public int Salary { get; set; }
 
-    public DateTime EndDate { get; set; }
-
+    [JsonIgnore]
     public Employer? Employer { get; set; }
 
     // Lista radnika koji su se prijavili za dati oglas
-    public List<Freelancer>? Freelancers { get; set; }
+    [JsonIgnore]
+    public List<FreelancerAdvertisement>? Freelancers { get; set; }
+
+    public Advertisement()
+    {
+        Status = "Active";
+        Freelancers = new List<FreelancerAdvertisement>();
+    }
 }

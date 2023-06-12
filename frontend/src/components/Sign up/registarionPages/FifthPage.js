@@ -26,7 +26,7 @@ export const FifthPage = () => {
         <div className="form-group mb-3">
             <div>
                 <label htmlFor="profileImage" className="form-label">Profilna slika:</label>
-                <input onChange={imageChange} type="file" className="form-control" id="profileImage" placeholder="Broj lične karte" accept="image/png, image/jpeg" />
+                <input onChange={imageChange} type="file" className="form-control" id="profileImage" accept="image/png, image/jpeg" />
                 <img src={inputValues["imgSrc"]} width="100" height="100" id="imgSrc" />
             </div>
             <div>

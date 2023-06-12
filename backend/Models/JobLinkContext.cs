@@ -11,26 +11,43 @@ public class JobLinkContext : DbContext
 
     public DbSet<Administrator>? Administrators { get; set; }
 
-    public DbSet<Advertisment>? Advertisments { get; set; }
+    public DbSet<Advertisement>? Advertisements { get; set; }
+
+    public DbSet<FreelancerAdvertisement>? FreelancerAdvertisements { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         // definisanje kompozitnih kljuceva
         modelBuilder.Entity<Freelancer>()
-                    .HasKey(f => new { f.UserName, f.Email, f.IdNumber });
+                    .HasKey(f => new { f.UserName, f.Email });
 
         modelBuilder.Entity<Employer>()
-                            .HasKey(e => new { e.UserName, e.Email, e.IdNumber });
+                            .HasKey(e => new { e.UserName, e.Email });
 
         modelBuilder.Entity<Administrator>()
-                            .HasKey(a => new { a.UserName, a.Email, a.IdNumber });
+                            .HasKey(a => new { a.UserName, a.Email });
 
-        // uparivanje stranog kompozitnog kljuca sa primarnim kompozitnim kljucem
-        modelBuilder.Entity<Advertisment>()
-                    .HasOne(o => o.Employer)
-                    .WithMany(p => p.Advertisments)
-                    .HasForeignKey(o => new { o.EmployerUserName, o.EmployerEmail, o.EmployerIdNumber })
-                    .HasPrincipalKey(p => new { p.UserName, p.Email, p.IdNumber });
+        modelBuilder.Entity<Advertisement>()
+                    .HasKey(a => a.Id);
+
+        modelBuilder.Entity<Advertisement>()
+                    .HasOne(a => a.Employer)
+                    .WithMany(e => e.Advertisements)
+                    .HasForeignKey(a => new { a.EmployerUserName, a.EmployerEmail });
+
+        // konfiguracija veze vise na vise
+        modelBuilder.Entity<FreelancerAdvertisement>()
+            .HasKey(fa => new { fa.UserName, fa.Email, fa.AdvertisementId });
+
+        modelBuilder.Entity<FreelancerAdvertisement>()
+                    .HasOne<Advertisement>(fa => fa.Advertisement)
+                    .WithMany(a => a.Freelancers)
+                    .HasForeignKey(fa => fa.AdvertisementId);
+
+        modelBuilder.Entity<FreelancerAdvertisement>()
+                    .HasOne<Freelancer>(fa => fa.Freelancer)
+                    .WithMany(f => f.Advertisements)
+                    .HasForeignKey(fa => new { fa.UserName, fa.Email });
     }
 }

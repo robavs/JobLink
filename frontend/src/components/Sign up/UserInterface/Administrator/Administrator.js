@@ -1,10 +1,7 @@
+import Dashboard from "../General/Dashboard"
 
-const Administrator = () => {
+export default function Administrator() {
     return (
-        <div>
-
-        </div>
+        <Dashboard />
     )
 }
-
-export default Administrator

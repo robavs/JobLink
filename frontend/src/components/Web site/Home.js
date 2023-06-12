@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import logo from '../../assets/img/bluelogo.png'
+import { useNavigate } from 'react-router-dom'
 
 const messages = ["Razvijaj inovativne ideje uz pomoć ambicioznih stručnjaka",
     "Radi na najkretivnijim projektima u industriji",
@@ -14,6 +15,7 @@ const Home = () => {
     const [typeSpeed, setTypeSpeed] = useState(50)
     const [isFullMessage, setIsFullMessage] = useState(false)
     const [animation, setAnimation] = useState(typingAnimation)
+    const navigate = useNavigate()
 
     useEffect(() => {
         const timeoutId = setInterval(() => {
@@ -72,10 +74,10 @@ const Home = () => {
                 <div className="container position-relative">
                     <div className="row gy-4 mt-5">
 
-                        <div className="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                        <div className="col-xl-3 col-md-6" data-aos="fade-up" data-aos-delay="100" style={{ cursor: "pointer" }}>
                             <div className="icon-box">
                                 <div className="icon"><i className="bi bi-easel"></i></div>
-                                <h4 className="title"><a href="" className="stretched-link">Pridružite nam se</a></h4>
+                                <h4 className="title"><a onClick={() => navigate("/signup/login")} className="stretched-link">Pridružite nam se</a></h4>
                             </div>
                         </div>
 

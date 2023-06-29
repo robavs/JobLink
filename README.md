@@ -1,6 +1,6 @@
 # JobLink
 
-JobLink is a platform designed for job posting and recruitment purposes specifically for the field of Software Engineering. The application was developed using Entity Framework Core with a code-first approach and React.
+JobLink is a platform designed for job posting and recruitment purposes specifically for the subject at University: Software Engineering. The application was developed using Entity Framework Core with a code-first approach and React.
 
 Unregistered users have the opportunity to register on the platform either as freelancers or employers by completing a 5-page registration form.
 
